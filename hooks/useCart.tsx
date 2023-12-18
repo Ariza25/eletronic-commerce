@@ -3,7 +3,7 @@ import { CartProductType } from "@/app/product/[productId]/ProductDetails"
 import { toast } from "react-hot-toast"
 
 type CartContextType = {
-    id: string;
+    id: string | number;
     cartTotalQty: number;
     cartProducts: CartProductType[] | null;
     cartTotalAmount: number;
@@ -71,16 +71,16 @@ export const CartContextProvider = (props: Props) => {
         })
     }, [])
 
-    const handleRemoveProductFromCart = useCallback((product: CartContextType) => {
+    const handleRemoveProductFromCart = useCallback((product: CartProductType) => {
         if (cartProducts) {
-            const filteredProduct = cartProducts.filter((item) => item.id !== product.id)
-            setCartProducts(filteredProduct)
-
-            toast.success("Product added to cart")
-            localStorage.setItem('eShopCartItems', JSON.stringify(filteredProduct))
-
+            const filteredProduct = cartProducts.filter((item) => item.id !== product.id);
+            setCartProducts(filteredProduct);
+    
+            toast.success("Product removed from cart"); // Corrigido para "Product removed from cart"
+            localStorage.setItem('eShopCartItems', JSON.stringify(filteredProduct));
         }
-    }, [cartProducts])
+    }, [cartProducts]);
+    
 
     const handleCartQtyIncrease = useCallback((product: CartProductType) => {
         let updatedCart;
@@ -129,6 +129,7 @@ export const CartContextProvider = (props: Props) => {
     }, []) //cartProducts
 
     const value = {
+        id: 'cart',
         cartTotalQty,
         cartProducts,
         cartTotalAmount,
